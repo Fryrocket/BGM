@@ -1,0 +1,47 @@
+# BGM Status (August 2026)
+
+## Working
+
+| Area | Notes |
+|------|--------|
+| Firmware HR / SpO₂ / temp | MAX30102 path in `Armband_Full.ino` |
+| LIS3DH motion + INT1 wake | Hardware wake + RTC EMA state |
+| 940 nm channel | Multi-sample + EMA; experimental glucose signal |
+| Deep sleep + quiet-wake skip | Power path implemented |
+| MQTT publish | Topic `armband/ppg`, full JSON payload |
+| Pi MQTT logger + SQLite | Continuous ingest |
+| Feature extraction | 17-vector contract frozen |
+| Quality gates | Still fraction + heuristic score; tighter optical gates recommended |
+| CPU baseline + multi-feature | Train / run scripts live |
+| Streamlit dashboard | Live + calibration tabs |
+| Hailo-8 driver path | diagnose / identify scripts; HEF inference priority in v0.4.2 |
+| Libre logging | `log_glucose.py` + calibrate flow |
+
+## Experimental / limited
+
+| Area | Notes |
+|------|--------|
+| Glucose accuracy | Depends on volume of high-quality still Libre pairs; not medical grade |
+| Hailo HEF models | Pipeline ready; needs trained + DFC-compiled HEF on device |
+| Motion artifact rejection on PPG | Basic magnitude gate only |
+| SpO₂ during heavy motion | Often invalid (`-1`) by design |
+
+## Recommended next priorities
+
+From armband-ai hardening list (highest leverage first):
+
+1. Consecutive-clean streak in quality / calibration pairing
+2. Drift monitor (still-only `filt940` median vs last cal)
+3. Tighter optical CV / range / slope thresholds
+4. More still Libre pairs → retrain multi-feature and optional MLP
+5. Compile and deploy a real HEF once pair count is solid
+
+Firmware-side polish:
+
+- Confirm deep-sleep current with a meter
+- Tune INT1 / software motion thresholds on-body
+- Decide long-term OLED keep vs remove for battery
+
+## Disclaimer
+
+Experimental personal research. **Not a medical device.**

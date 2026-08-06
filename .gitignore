@@ -1,0 +1,16 @@
+# Local clones of component repos (created by scripts/clone-all.sh)
+/firmware/
+/host/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+
+# Local notes
+*.local.md
+.env
+.env.*
