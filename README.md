@@ -65,11 +65,13 @@ git clone https://github.com/Fryrocket/armband-ai.git
 
 | Doc | Purpose |
 |-----|---------|
+| **[docs/PINOUT.md](docs/PINOUT.md)** | **Printable pinout + wire color card** (MCU soldering reference) |
 | **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** | System architecture, data flow, MQTT contract, feature vector |
 | **[docs/SETUP_FULL.md](docs/SETUP_FULL.md)** | End-to-end setup: armband + Pi + Hailo + first readings |
 | **[docs/COMPONENTS.md](docs/COMPONENTS.md)** | What lives in each repo and how they talk |
 | **[docs/STATUS.md](docs/STATUS.md)** | Current status matrix and open work |
 | [armband-ppg-940nm/SETUP.md](https://github.com/Fryrocket/armband-ppg-940nm/blob/main/SETUP.md) | Firmware hardware + flash details |
+| [armband-ppg-940nm/PINOUT.md](https://github.com/Fryrocket/armband-ppg-940nm/blob/main/PINOUT.md) | Canonical pinout card (same content) |
 | [armband-ai/HARDWARE.md](https://github.com/Fryrocket/armband-ai/blob/main/HARDWARE.md) | Pi 5 + AI HAT + SSD BOM |
 | [armband-ai/docs/HAILO_MODEL.md](https://github.com/Fryrocket/armband-ai/blob/main/docs/HAILO_MODEL.md) | Train MLP → ONNX → HEF |
 
