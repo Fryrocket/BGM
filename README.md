@@ -99,9 +99,10 @@ See **[docs/STATUS.md](docs/STATUS.md)** for details and next priorities.
 
 ## License / disclaimer
 
-Experimental personal research project. See [LICENSE](LICENSE).
+**GNU General Public License v3.0 or later** ([LICENSE](LICENSE)).  
+Same license applies to the companion repos [armband-ppg-940nm](https://github.com/Fryrocket/armband-ppg-940nm) and [armband-ai](https://github.com/Fryrocket/armband-ai).
 
-**Do not use for medical decisions.**
+Experimental personal research project. **Do not use for medical decisions.**
 
 ---
 
