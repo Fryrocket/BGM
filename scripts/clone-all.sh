@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Fryrocket
+#
 # Clone both BGM component repos into this workspace.
 # Run from the BGM repo root.
 set -euo pipefail
