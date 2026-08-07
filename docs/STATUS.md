@@ -11,7 +11,7 @@
 | MQTT publish | Topic `armband/ppg`, full JSON payload |
 | Pi MQTT logger + SQLite | Continuous ingest |
 | Feature extraction | 17-vector contract frozen |
-| Quality gates | Still fraction + heuristic score; tighter optical gates recommended |
+| Quality gates | Still fraction (raw-window) + heuristic score; tighter optical gates recommended |
 | CPU baseline + multi-feature | Train / run scripts live |
 | Streamlit dashboard | Live + calibration tabs |
 | Hailo-8 driver path | diagnose / identify scripts; HEF inference priority in v0.4.2 |
@@ -25,6 +25,12 @@ In `armband-ppg-940nm` `firmware/Armband_Full.ino`:
 - **MAX30102 FIFO drain** – buffer fill now uses `check()` / `available()` / `getFIFOIR()` / `getFIFORed()` / `nextSample()` so samples actually advance instead of re-reading the same cached value. Finger/beat detection uses a fresh buffer sample.
 
 These address the two issues that were preventing reliable motion wake and correct PPG sample streams.
+
+## Recent AI / calibration fixes (2026-08-06/07)
+
+In `armband-ai` `src/armband_ai/calibration.py`:
+
+- **still_fraction gate order** – `build_calibration_pairs()` previously computed `still_fraction` *after* filtering to `moving==0` when `prefer_still=True`. That made the fraction trivially 1.0 whenever any still sample existed and silently defeated `min_still_fraction`. It is now computed on the **raw, unfiltered window first**, then the prefer-still filter is applied for feature aggregation. Confirmed with adversarial synthetic windows (mostly-moving + 1–2 stray still samples): old logic accepted them; fixed logic correctly rejects them.
 
 ## Experimental / limited
 
