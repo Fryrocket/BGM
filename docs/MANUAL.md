@@ -1,51 +1,59 @@
 # BGM Illustrated User Manual
 
-Printed / PDF guides for the full system.
-
 | Document | Description |
 |----------|-------------|
-| **[BGM_User_Manual.pdf](BGM_User_Manual.pdf)** | Full illustrated step-by-step manual (wiring, firmware, Pi host, calibration, appendices) |
-| **[BGM_Soldering_Cheat_Sheet.pdf](BGM_Soldering_Cheat_Sheet.pdf)** | One-page printable pinout + wire colors + soldering order |
+| **[BGM_User_Manual.pdf](BGM_User_Manual.pdf)** | Full illustrated step-by-step manual |
+| **[BGM_Soldering_Cheat_Sheet.pdf](BGM_Soldering_Cheat_Sheet.pdf)** | One-page printable pinout + soldering order |
 
-> **Note:** If the PDF links above 404 on a fresh clone, download and place them in `docs/`:
-> - [BGM_User_Manual.pdf](https://drive.google.com/file/d/1pRCCOmHapwTVkaBosoUSfZWLxVAIIN9w/view) (updated with callouts)
+> If PDF links 404 on clone, download and place in `docs/`:
+> - [BGM_User_Manual.pdf](https://drive.google.com/file/d/14ChENNw8oqeRPMeAZlRRHyBXFF_KXySD/view) (replace with latest Drive upload after each regen)
 > - [BGM_Soldering_Cheat_Sheet.pdf](https://drive.google.com/file/d/1-3Mp0HuD2vnVI2Nu498CMh9ydWibN5CD/view)
 >
-> Then: `git add docs/*.pdf && git commit -m "docs: add illustrated manuals" && git push`
+> `git add docs/*.pdf && git commit -m "docs: add illustrated manuals" && git push`
 
-Also see:
+## Document pin (manual generation)
 
-- [PINOUT.md](PINOUT.md) — canonical pinout card (markdown)
-- [SETUP_FULL.md](SETUP_FULL.md) — end-to-end text setup
-- [ARCHITECTURE.md](ARCHITECTURE.md) — MQTT contract + feature vector
-- [STATUS.md](STATUS.md) — current status matrix
+| Repo | Commit (short) |
+|------|----------------|
+| BGM | `121ca3fbde` |
+| armband-ppg-940nm | `87bf9cff26` |
+| armband-ai | `1a80ac12c7` |
 
-## Manual contents (PDF)
+Generated **2026-08-08**. Re-check SHAs if repos have moved on.
+
+## Manual contents
 
 1. What is BGM?
-2. Safety & disclaimer (LiPo → battery pads only)
-3. System architecture
-4. Parts checklist
-5. Wearable wiring & soldering
-6. Firmware setup & first flash
-7. Raspberry Pi host setup
-8. First data, dashboard & calibration
-9. Verification checklist
-10. Troubleshooting
-11. Production settings & next steps
-- Appendix A — I²C scanner
-- Appendix B — INT1 / motion tuning on-body
-- Appendix C — Measuring deep-sleep current
+2. Safety & critical rules
+3. System architecture (+ MQTT LAN risk callout)
+4. Parts, **tools & consumables**
+5. Wearable wiring & soldering (**OLED on shared I2C**, BATTERY_SCALE procedure)
+6. **Skin / wear guidance** (placement, tension, calibration hygiene)
+7. Firmware setup & first flash
+8. Raspberry Pi host setup
+9. First data, dashboard & calibration
+10. Verification checklist
+11. **Production settings — exact revert checklist**
+12. Troubleshooting
+- Appendix A — I2C scanner
+- Appendix B — INT1 / motion tuning
+- Appendix C — Deep-sleep current **& battery life estimates**
+- Appendix D — **Glossary**
+- Companion: `BGM_Soldering_Cheat_Sheet.pdf`
 
-## Practical callouts (also in the PDF)
+## Practical callouts
 
-### Calibration — still_fraction
+### still_fraction
+Passing `min_still ≥ 0.70` means the **raw window was mostly still**, not motion-free for every sample. Consecutive-clean + optical CV remain recommended.
 
-`still_fraction` is computed on the **raw window before** prefer-still filtering (so the gate is not trivially 1.0). Passing `min_still ≥ 0.70` means the window was **mostly still**, not motion-free for every sample. A few seconds of motion at the edge of a window can still pass. Do not treat “passed quality gate” as proof the session was clean end-to-end — consecutive-clean streak and optical CV/range checks remain recommended.
+### Latched INT1
+Clear via `INT1_SRC` on wake and before sleep. ESP32-C3 uses `esp_deep_sleep_enable_gpio_wakeup` only (no ext0/ext1).
 
-### Firmware — latched INT1
+### MQTT
+Empty user/password is allowed for bring-up. Prefer local broker auth; do not expose to the public internet. Default path is cleartext on the LAN (biometric telemetry).
 
-LIS3DH INT1 is **active-low and latched**. Once it fires, it stays asserted until firmware reads `INT1_SRC`. If that clear never happens, the pin can immediately re-wake the ESP32-C3 or block the next deep sleep. On this chip, GPIO wake uses `esp_deep_sleep_enable_gpio_wakeup` (not ext0/ext1 — those sources do not exist on ESP32-C3). Always clear the latch on wake and again before re-entering sleep.
+### OLED
+Optional SSD1306 shares **D4/D5 I2C** + 3V3 + GND — no extra GPIO. Listed in pin map and soldering step 8.
 
 **Experimental research only. Not a medical device.**  
 Copyright (C) 2026 Fryrocket · GNU GPLv3 or later
