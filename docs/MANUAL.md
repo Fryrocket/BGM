@@ -6,7 +6,7 @@
 | **[BGM_Soldering_Cheat_Sheet.pdf](BGM_Soldering_Cheat_Sheet.pdf)** | One-page printable pinout + soldering order |
 
 > If PDF links 404 on clone, download and place in `docs/`:
-> - [BGM_User_Manual.pdf](https://drive.google.com/file/d/14ChENNw8oqeRPMeAZlRRHyBXFF_KXySD/view) (replace with latest Drive upload after each regen)
+> - [BGM_User_Manual.pdf](https://drive.google.com/file/d/1WXUtUwpm-_B4p0XxQ89aXaOqWYHRuLGZ/view)
 > - [BGM_Soldering_Cheat_Sheet.pdf](https://drive.google.com/file/d/1-3Mp0HuD2vnVI2Nu498CMh9ydWibN5CD/view)
 >
 > `git add docs/*.pdf && git commit -m "docs: add illustrated manuals" && git push`
