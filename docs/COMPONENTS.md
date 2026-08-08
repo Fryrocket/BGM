@@ -8,21 +8,30 @@
 | **armband-ppg-940nm** | `firmware/` | C++ (Arduino / PlatformIO) | Wearable firmware, sensors, MQTT publish, power |
 | **armband-ai** | `host/` | Python | MQTT consume, DB, features, models, Hailo, dashboard |
 
+After `bash scripts/clone-all.sh` the sketch lives at:
+
+```
+BGM/firmware/firmware/Armband_Full.ino
+```
+
+Why double `firmware/`? `clone-all.sh` clones the whole **armband-ppg-940nm** repo into a folder named `firmware/`. That repo already keeps its sketches under its own internal `firmware/` directory. Always `ls firmware/` (or `ls firmware/firmware/`) after cloning rather than trusting a single path string.
+
 ## armband-ppg-940nm (firmware)
 
 **Owns:**
 
 - Pin map and sensor drivers (MAX30102, LIS3DH, 940 nm, battery ADC, OLED)
 - Deep sleep + INT1 motion wake + RTC state
-- MQTT publisher (topic `armband/ppg`, JSON schema above)
+- MQTT publisher (topic `armband/ppg`, JSON schema; **QoS 0**)
 - On-device filtering (EMA motion, EMA 940 nm)
 
 **Does not own:**
 
 - Storage, models, UI, calibration math
 
-Key entry: `firmware/Armband_Full.ino`  
-Docs: `SETUP.md`, `NOTES.md`
+Key entry (inside the component repo): `firmware/Armband_Full.ino`  
+Key entry (from BGM workspace after clone-all): `firmware/firmware/Armband_Full.ino`  
+Docs: `SETUP.md`, `NOTES.md`, `PINOUT.md`
 
 ## armband-ai (host)
 
@@ -40,7 +49,7 @@ Docs: `SETUP.md`, `NOTES.md`
 
 - Firmware source or armband pinout (referenced only)
 
-Key entry points:
+Key entry points (from BGM workspace: under `host/`):
 
 - `scripts/run_logger.py`
 - `scripts/run_inference.py`
@@ -71,6 +80,7 @@ Config alignment checklist:
 | `MQTT_TOPIC = "armband/ppg"` | `mqtt.topic: "armband/ppg"` |
 | `MQTT_SERVER` = Pi IP | broker usually `localhost` on Pi |
 | user/pass (optional) | matching `mqtt.username` / `password` |
+| publish QoS **0** (default) | subscribe QoS 1 |
 
 ## Optional: true git submodules
 
