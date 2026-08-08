@@ -10,9 +10,9 @@
 | Deep sleep + quiet-wake skip | Power path implemented; GPIO wake API (not ext0) |
 | MQTT publish | Topic `armband/ppg`, full JSON payload |
 | Pi MQTT logger + SQLite | Continuous ingest |
-| Feature extraction | 17-vector contract frozen |
-| Quality gates | Still fraction (**raw-window**) + heuristic score; tighter optical gates recommended |
-| CPU baseline + multi-feature | Train / run scripts live |
+| Feature extraction | 17-vector contract frozen; **+ max_clean_streak / clean_fraction** |
+| Quality gates | Still fraction (**raw-window**) + heuristic score + **consecutive-clean streak** |
+| CPU baseline + multi-feature | Train / run scripts live; `--min-clean-streak` supported |
 | Streamlit dashboard | Live + calibration tabs |
 | Hailo-8 driver path | diagnose / identify scripts; HEF inference priority in v0.4.2 |
 | Libre logging | `log_glucose.py` + calibrate flow |
@@ -29,13 +29,15 @@ These address the issues that were preventing reliable motion wake and correct P
 
 **Practical note (latched INT1):** INT1 is active-low and latched. Firmware must read `INT1_SRC` to clear it on wake and again before re-entering deep sleep. A stuck latch can immediately re-wake or block sleep.
 
-## Recent AI / calibration fixes (2026-08-06/07)
+## Recent AI / calibration fixes (2026-08-06/08)
 
-In `armband-ai` `src/armband_ai/calibration.py`:
+In `armband-ai`:
 
-- **still_fraction gate order** – `build_calibration_pairs()` previously computed `still_fraction` *after* filtering to `moving==0` when `prefer_still=True`. That made the fraction trivially 1.0 whenever any still sample existed and silently defeated `min_still_fraction`. It is now computed on the **raw, unfiltered window first**, then the prefer-still filter is applied for feature aggregation. Confirmed with adversarial synthetic windows (mostly-moving + 1–2 stray still samples): old logic accepted them; fixed logic correctly rejects them.
+- **still_fraction gate order** – `build_calibration_pairs()` previously computed `still_fraction` *after* filtering to `moving==0` when `prefer_still=True`. That made the fraction trivially 1.0 whenever any still sample existed and silently defeated `min_still_fraction`. It is now computed on the **raw, unfiltered window first**, then the prefer-still filter is applied for feature aggregation.
 
-**Practical note (still_fraction):** Passing `min_still ≥ 0.70` means the raw window was *mostly* still, not motion-free for every sample. Edge motion can still pass the gate — consecutive-clean + optical CV checks remain recommended hardening.
+- **Consecutive-clean streak (2026-08-08)** – `WindowFeatures` now includes `max_clean_streak` and `clean_fraction`. A sample is clean when still *and* optically stable (relative deviation from short rolling median + local range). Calibration accepts `min_clean_streak` (config / `--min-clean-streak`; default 0 = off; recommend 10–15). Quality scoring penalizes short streaks. Prefer-still can no longer cherry-pick short clean snippets inside a noisy window when the streak gate is enabled.
+
+**Practical note (still_fraction):** Passing `min_still ≥ 0.70` means the raw window was *mostly* still, not motion-free for every sample. Edge motion can still pass the still gate alone — enable `min_clean_streak` for sustained stable periods.
 
 ## Experimental / limited
 
@@ -50,9 +52,9 @@ In `armband-ai` `src/armband_ai/calibration.py`:
 
 From armband-ai hardening list (highest leverage first):
 
-1. Consecutive-clean streak in quality / calibration pairing
+1. ~~Consecutive-clean streak in quality / calibration pairing~~ **done 2026-08-08**
 2. Drift monitor (still-only `filt940` median vs last cal)
-3. Tighter optical CV / range / slope thresholds
+3. Tighter optical CV / range / slope thresholds (partially applied in quality.py)
 4. More still Libre pairs → retrain multi-feature and optional MLP
 5. Compile and deploy a real HEF once pair count is solid
 
