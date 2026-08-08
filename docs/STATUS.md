@@ -11,7 +11,7 @@
 | MQTT publish | Topic `armband/ppg`, full JSON payload |
 | Pi MQTT logger + SQLite | Continuous ingest |
 | Feature extraction | 17-vector contract frozen; **+ max_clean_streak / clean_fraction** |
-| Quality gates | Still fraction (**raw-window**) + heuristic score + **consecutive-clean streak** |
+| Quality gates | Still fraction (**raw-window**) + quality score (**raw-window**) + **consecutive-clean streak** |
 | CPU baseline + multi-feature | Train / run scripts live; `--min-clean-streak` supported |
 | Streamlit dashboard | Live + calibration tabs |
 | Hailo-8 driver path | diagnose / identify scripts; HEF inference priority in v0.4.2 |
@@ -35,9 +35,11 @@ In `armband-ai`:
 
 - **still_fraction gate order** – `build_calibration_pairs()` previously computed `still_fraction` *after* filtering to `moving==0` when `prefer_still=True`. That made the fraction trivially 1.0 whenever any still sample existed and silently defeated `min_still_fraction`. It is now computed on the **raw, unfiltered window first**, then the prefer-still filter is applied for feature aggregation.
 
+- **quality_score gate order (2026-08-08)** – `score_dataframe()` was previously called *after* the same prefer-still filter. Because the quality heuristic is dominated by motion terms, scoring the already-cleaned subset silently inflated `quality_score` the same way the still_fraction bug did. Quality is now computed from the raw `WindowFeatures` via `score_window()` **before** prefer-still is applied. Prefer-still still controls which rows are averaged into `filt940_mean` etc.; it no longer affects what is scored or gated.
+
 - **Consecutive-clean streak (2026-08-08)** – `WindowFeatures` now includes `max_clean_streak` and `clean_fraction`. A sample is clean when still *and* optically stable (relative deviation from short rolling median + local range). Calibration accepts `min_clean_streak` (config / `--min-clean-streak`; default 0 = off; recommend 10–15). Quality scoring penalizes short streaks. Prefer-still can no longer cherry-pick short clean snippets inside a noisy window when the streak gate is enabled.
 
-**Practical note (still_fraction):** Passing `min_still ≥ 0.70` means the raw window was *mostly* still, not motion-free for every sample. Edge motion can still pass the still gate alone — enable `min_clean_streak` for sustained stable periods.
+**Practical note (still_fraction + quality):** Passing `min_still ≥ 0.70` and a non-trivial `min_quality` now means the *raw* window was mostly still and scored well, not “looked good after throwing away the moving samples.” Edge motion can still pass the still gate alone — enable `min_clean_streak` for sustained stable periods.
 
 ## Experimental / limited
 
@@ -53,10 +55,11 @@ In `armband-ai`:
 From armband-ai hardening list (highest leverage first):
 
 1. ~~Consecutive-clean streak in quality / calibration pairing~~ **done 2026-08-08**
-2. Drift monitor (still-only `filt940` median vs last cal)
-3. Tighter optical CV / range / slope thresholds (partially applied in quality.py)
-4. More still Libre pairs → retrain multi-feature and optional MLP
-5. Compile and deploy a real HEF once pair count is solid
+2. ~~Quality score on raw window~~ **done 2026-08-08**
+3. Drift monitor (still-only `filt940` median vs last cal)
+4. Tighter optical CV / range / slope thresholds (partially applied in quality.py)
+5. More still Libre pairs → retrain multi-feature and optional MLP
+6. Compile and deploy a real HEF once pair count is solid
 
 Firmware-side polish:
 
