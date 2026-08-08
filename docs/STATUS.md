@@ -5,7 +5,7 @@
 | Area | Notes |
 |------|--------|
 | Firmware HR / SpO₂ / temp | MAX30102 path in `Armband_Full.ino` |
-| LIS3DH motion + INT1 wake | Hardware wake + RTC EMA state |
+| LIS3DH motion + INT1 wake | Hardware wake + RTC EMA state; INT1 uses **detected** I²C address (0x18 or 0x19) |
 | 940 nm channel | Multi-sample + EMA; experimental glucose signal |
 | Deep sleep + quiet-wake skip | Power path implemented |
 | MQTT publish | Topic `armband/ppg`, full JSON payload |
@@ -17,14 +17,15 @@
 | Hailo-8 driver path | diagnose / identify scripts; HEF inference priority in v0.4.2 |
 | Libre logging | `log_glucose.py` + calibrate flow |
 
-## Recent firmware fixes (2026-08-06/07)
+## Recent firmware fixes (2026-08-06/08)
 
 In `armband-ppg-940nm` `firmware/Armband_Full.ino`:
 
 - **Deep-sleep GPIO wake** – switched from `esp_sleep_enable_ext0_wakeup` to `esp_deep_sleep_enable_gpio_wakeup` (correct API for ESP32-C3 / XIAO). Wake-cause check updated to `ESP_SLEEP_WAKEUP_GPIO`.
 - **MAX30102 FIFO drain** – buffer fill now uses `check()` / `available()` / `getFIFOIR()` / `getFIFORed()` / `nextSample()` so samples actually advance instead of re-reading the same cached value. Finger/beat detection uses a fresh buffer sample.
+- **LIS3DH INT1 I²C address** – `setupLIS3DH_INT1()` / `clearLIS3DH_INT1()` previously hardcoded `0x18`. Firmware now stores the address returned by `lis.begin` (0x18 or 0x19) in `lis3dhAddr` and uses it for all INT1 register traffic. Without this, boards with SA0 tied high never got motion-wake config.
 
-These address the two issues that were preventing reliable motion wake and correct PPG sample streams.
+These address the issues that were preventing reliable motion wake and correct PPG sample streams.
 
 ## Recent AI / calibration fixes (2026-08-06/07)
 
