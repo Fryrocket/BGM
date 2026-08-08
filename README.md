@@ -52,7 +52,7 @@ BGM/
 └── host/              → clone of armband-ai
 ```
 
-Then follow **[docs/SETUP_FULL.md](docs/SETUP_FULL.md)** for hardware, firmware flash, Pi setup, and first calibration.
+Then follow **[docs/BGM_User_Manual.pdf](docs/BGM_User_Manual.pdf)** (illustrated) or **[docs/SETUP_FULL.md](docs/SETUP_FULL.md)** for hardware, firmware flash, Pi setup, and first calibration.
 
 ### Individual repos (if you prefer separate clones)
 
@@ -65,7 +65,10 @@ git clone https://github.com/Fryrocket/armband-ai.git
 
 | Doc | Purpose |
 |-----|---------|
-| **[docs/PINOUT.md](docs/PINOUT.md)** | **Printable pinout + wire color card** (MCU soldering reference) |
+| **[docs/BGM_User_Manual.pdf](docs/BGM_User_Manual.pdf)** | **Illustrated step-by-step user manual** (wiring, firmware, Pi, calibration, appendices) |
+| **[docs/BGM_Soldering_Cheat_Sheet.pdf](docs/BGM_Soldering_Cheat_Sheet.pdf)** | **One-page printable soldering / pinout card** |
+| **[docs/MANUAL.md](docs/MANUAL.md)** | Manual index + links |
+| **[docs/PINOUT.md](docs/PINOUT.md)** | Printable pinout + wire color card (markdown) |
 | **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** | System architecture, data flow, MQTT contract, feature vector |
 | **[docs/SETUP_FULL.md](docs/SETUP_FULL.md)** | End-to-end setup: armband + Pi + Hailo + first readings |
 | **[docs/COMPONENTS.md](docs/COMPONENTS.md)** | What lives in each repo and how they talk |
