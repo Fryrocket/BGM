@@ -17,6 +17,8 @@
 | Streamlit dashboard | Live + calibration tabs |
 | Hailo-8 driver path | diagnose / identify scripts; HEF inference priority in v0.4.2 |
 | Libre logging | `log_glucose.py` + calibrate flow |
+| **Drift monitor** | still-only filt940 median vs last-cal baseline; advisory `is_stale` (2026-08-08) |
+| **Insert-time soft validation** | BPM 35–220 / temp 30–45 °C log+clamp on insert (2026-08-08) |
 
 ## Recent firmware fixes (2026-08-06/08)
 
@@ -42,6 +44,10 @@ In `armband-ai`:
 
 - **MLP training consistency (2026-08-08, second fix)** – `scripts/train_mlp_onnx.py` previously called `build_calibration_pairs()` without `min_clean_streak` (so the consecutive-clean gate was silently skipped for the neural path) and re-filtered stillness with an ad-hoc `>=4 still samples` rule that did not match `prefer_still`. The `quality_score` on a training row could therefore describe a different candidate window than the feature vector being trained. Now passes `min_clean_streak` (CLI default 10) and mirrors `prefer_still` exactly; added `--min-clean-streak` / `--no-prefer-still` for parity with `calibrate.py` and `train_multifeature.py`.
 
+- **Drift monitor (2026-08-08)** – `src/armband_ai/drift_monitor.py`. Maintains still-only rolling median of `filt940`; snapshots baseline at successful calibration (`models/drift_baseline.json`); surfaces `drift` / `is_stale` (advisory, default |Δ| ≥ 40). Does not block inference or alter the 17-float feature contract.
+
+- **Insert-time soft validation (2026-08-08)** – `db.insert_reading` now soft-validates BPM (35–220) and temp (30–45 °C): logs a warning and clamps; never rejects the insert (consistent with SpO₂ < 0 handling).
+
 **Practical note (still_fraction + quality):** Passing `min_still ≥ 0.70` and a non-trivial `min_quality` now means the *raw* window was mostly still and scored well, not “looked good after throwing away the moving samples.” Edge motion can still pass the still gate alone — enable `min_clean_streak` for sustained stable periods.
 
 ## Experimental / limited
@@ -60,10 +66,11 @@ From armband-ai hardening list (highest leverage first):
 1. ~~Consecutive-clean streak in quality / calibration pairing~~ **done 2026-08-08**
 2. ~~Quality score on raw window~~ **done 2026-08-08**
 3. ~~MLP path uses same gates as multi-feature / calibrate~~ **done 2026-08-08**
-4. Drift monitor (still-only `filt940` median vs last cal)
-5. Tighter optical CV / range / slope thresholds (partially applied in quality.py)
-6. More still Libre pairs → retrain multi-feature and optional MLP
-7. Compile and deploy a real HEF once pair count is solid
+4. ~~Drift monitor (still-only `filt940` median vs last cal)~~ **done 2026-08-08**
+5. ~~Insert-time soft validation (BPM/temp)~~ **done 2026-08-08**
+6. Tighter optical CV / range / slope thresholds (partially applied in quality.py)
+7. More still Libre pairs → retrain multi-feature and optional MLP
+8. Compile and deploy a real HEF once pair count is solid
 
 Firmware-side polish:
 

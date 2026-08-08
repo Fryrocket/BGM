@@ -62,6 +62,8 @@
 
 The Pi logger (`armband_ai.logger`) JSON-parses this and inserts into SQLite. Downstream feature and quality code expect these keys.
 
+**Insert-time soft validation (2026-08-08):** `insert_reading` in `armband-ai` soft-checks BPM (35–220) and temperature (30–45 °C). Out-of-range values are logged and clamped; the row is never rejected (same pattern as SpO₂ < 0).
+
 ## Feature vector (frozen contract)
 
 Used by multi-feature models and the Hailo MLP path. Order must match train → ONNX → HEF:
@@ -106,7 +108,7 @@ Before a Libre/fingerstick pair enters a model:
 - `min_clean_streak` — consecutive still **and** optically stable samples; recommend 10–15 (0 = disabled)
 - Optical CV / range / slope checks on `filt940`
 
-Drift monitoring (still-only rolling median of `filt940` vs last successful calibration) is recommended but not yet automated.
+**Drift monitor (advisory, 2026-08-08):** still-only rolling median of `filt940` vs the median snapshot taken at the last successful calibration (`models/drift_baseline.json`). Exposed as `drift` / `is_stale` (default |Δ| ≥ 40). This is a **dashboard flag only** — it is not a training-time gate and does not interact with `still_fraction` / `quality_score` / `min_clean_streak`. See `armband-ai` `src/armband_ai/drift_monitor.py`.
 
 ## Repo boundaries
 
