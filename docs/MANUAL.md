@@ -7,6 +7,12 @@ Printed / PDF guides for the full system.
 | **[BGM_User_Manual.pdf](BGM_User_Manual.pdf)** | Full illustrated step-by-step manual (wiring, firmware, Pi host, calibration, appendices) |
 | **[BGM_Soldering_Cheat_Sheet.pdf](BGM_Soldering_Cheat_Sheet.pdf)** | One-page printable pinout + wire colors + soldering order |
 
+> **Note:** If the PDF links above 404 on a fresh clone, download from Google Drive and place them in `docs/`:
+> - [BGM_User_Manual.pdf](https://drive.google.com/file/d/1qOg_rRg8EGSbF83JS6pWgIZFoRkgCJAy/view)
+> - [BGM_Soldering_Cheat_Sheet.pdf](https://drive.google.com/file/d/1-3Mp0HuD2vnVI2Nu498CMh9ydWibN5CD/view)
+>
+> Then: `git add docs/*.pdf && git commit -m "docs: add illustrated manuals" && git push`
+
 Also see:
 
 - [PINOUT.md](PINOUT.md) — canonical pinout card (markdown)
