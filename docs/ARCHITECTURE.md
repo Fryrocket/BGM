@@ -25,7 +25,9 @@
 
 ## MQTT contract
 
-**Topic:** `armband/ppg` (QoS 1 recommended)
+**Topic:** `armband/ppg`
+
+**QoS:** Firmware publishes with **QoS 0** (PubSubClient default — intentional fire-and-forget for non-critical telemetry). The host logger subscribes at **QoS 1**. Messages can silently drop under poor Wi‑Fi; that is expected until you edit the firmware `publish()` call to QoS 1.
 
 **Payload (JSON) from firmware:**
 
@@ -86,6 +88,8 @@ Used by multi-feature models and the Hailo MLP path. Order must match train → 
 
 Shape: `[1, 17]` float32.
 
+Extra diagnostic fields on `WindowFeatures` (not in the frozen vector): `max_clean_streak`, `clean_fraction`.
+
 ## Inference priority (host)
 
 1. **Hailo HEF** (if configured and device healthy)
@@ -97,12 +101,12 @@ Shape: `[1, 17]` float32.
 
 Before a Libre/fingerstick pair enters a model:
 
-- `min_quality` (heuristic 0–100)
-- `min_still_fraction`
-- Preferred: consecutive clean streak (still **and** optically stable)
+- `min_quality` (heuristic 0–100) — recommend ≥ 60–65
+- `min_still_fraction` — recommend ≥ 0.70
+- `min_clean_streak` — consecutive still **and** optically stable samples; recommend 10–15 (0 = disabled)
 - Optical CV / range / slope checks on `filt940`
 
-Drift monitoring uses still-only rolling median of `filt940` vs last successful calibration.
+Drift monitoring (still-only rolling median of `filt940` vs last successful calibration) is recommended but not yet automated.
 
 ## Repo boundaries
 
