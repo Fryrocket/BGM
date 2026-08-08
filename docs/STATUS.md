@@ -13,6 +13,7 @@
 | Feature extraction | 17-vector contract frozen; **+ max_clean_streak / clean_fraction** |
 | Quality gates | Still fraction (**raw-window**) + quality score (**raw-window**) + **consecutive-clean streak** |
 | CPU baseline + multi-feature | Train / run scripts live; `--min-clean-streak` supported |
+| MLP → ONNX path | `train_mlp_onnx.py` now passes `min_clean_streak` and mirrors `prefer_still` exactly |
 | Streamlit dashboard | Live + calibration tabs |
 | Hailo-8 driver path | diagnose / identify scripts; HEF inference priority in v0.4.2 |
 | Libre logging | `log_glucose.py` + calibrate flow |
@@ -39,6 +40,8 @@ In `armband-ai`:
 
 - **Consecutive-clean streak (2026-08-08)** – `WindowFeatures` now includes `max_clean_streak` and `clean_fraction`. A sample is clean when still *and* optically stable (relative deviation from short rolling median + local range). Calibration accepts `min_clean_streak` (config / `--min-clean-streak`; default 0 = off; recommend 10–15). Quality scoring penalizes short streaks. Prefer-still can no longer cherry-pick short clean snippets inside a noisy window when the streak gate is enabled.
 
+- **MLP training consistency (2026-08-08, second fix)** – `scripts/train_mlp_onnx.py` previously called `build_calibration_pairs()` without `min_clean_streak` (so the consecutive-clean gate was silently skipped for the neural path) and re-filtered stillness with an ad-hoc `>=4 still samples` rule that did not match `prefer_still`. The `quality_score` on a training row could therefore describe a different candidate window than the feature vector being trained. Now passes `min_clean_streak` (CLI default 10) and mirrors `prefer_still` exactly; added `--min-clean-streak` / `--no-prefer-still` for parity with `calibrate.py` and `train_multifeature.py`.
+
 **Practical note (still_fraction + quality):** Passing `min_still ≥ 0.70` and a non-trivial `min_quality` now means the *raw* window was mostly still and scored well, not “looked good after throwing away the moving samples.” Edge motion can still pass the still gate alone — enable `min_clean_streak` for sustained stable periods.
 
 ## Experimental / limited
@@ -56,10 +59,11 @@ From armband-ai hardening list (highest leverage first):
 
 1. ~~Consecutive-clean streak in quality / calibration pairing~~ **done 2026-08-08**
 2. ~~Quality score on raw window~~ **done 2026-08-08**
-3. Drift monitor (still-only `filt940` median vs last cal)
-4. Tighter optical CV / range / slope thresholds (partially applied in quality.py)
-5. More still Libre pairs → retrain multi-feature and optional MLP
-6. Compile and deploy a real HEF once pair count is solid
+3. ~~MLP path uses same gates as multi-feature / calibrate~~ **done 2026-08-08**
+4. Drift monitor (still-only `filt940` median vs last cal)
+5. Tighter optical CV / range / slope thresholds (partially applied in quality.py)
+6. More still Libre pairs → retrain multi-feature and optional MLP
+7. Compile and deploy a real HEF once pair count is solid
 
 Firmware-side polish:
 
