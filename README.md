@@ -85,8 +85,6 @@ git clone https://github.com/Fryrocket/armband-ios.git
 
 ## File index
 
-Direct links to every file in this repo.
-
 **Docs**
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — system architecture, feature vector + MQTT contracts
 - [docs/COMPONENTS.md](docs/COMPONENTS.md) — hardware bill of materials
@@ -96,18 +94,14 @@ Direct links to every file in this repo.
 - [docs/STATUS.md](docs/STATUS.md) — current project status
 
 **Scripts**
-- [scripts/clone-all.sh](scripts/clone-all.sh)
-- [scripts/setup-workspace.sh](scripts/setup-workspace.sh)
+- [scripts/clone-all.sh](scripts/clone-all.sh) — clone all component repos into one workspace
 - [scripts/generate_file_indexes.py](scripts/generate_file_indexes.py) — regenerate File index sections across all component READMEs
+- [scripts/setup-workspace.sh](scripts/setup-workspace.sh) — workspace helper
+- [scripts/update_file_index.py](scripts/update_file_index.py) — single-repo File index updater used by GitHub Action
 
-**Root**
-- [LICENSE](LICENSE)
+**Config**
 - [.gitignore](.gitignore)
-
-**Sibling repos**
-- [armband-ppg-940nm](https://github.com/Fryrocket/armband-ppg-940nm) — firmware
-- [armband-ai](https://github.com/Fryrocket/armband-ai) — Pi 5 + Hailo host
-- [armband-ios](https://github.com/Fryrocket/armband-ios) — iPhone companion
+- [LICENSE](LICENSE)
 
 ## License / disclaimer
 
