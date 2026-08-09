@@ -92,6 +92,11 @@ git clone https://github.com/Fryrocket/armband-ios.git
 - [docs/PINOUT.md](docs/PINOUT.md) — wiring and pin assignments
 - [docs/SETUP_FULL.md](docs/SETUP_FULL.md) — end-to-end setup path
 - [docs/STATUS.md](docs/STATUS.md) — current project status
+- [docs/automation/bgm-bundle-repos.sh](docs/automation/bgm-bundle-repos.sh)
+- [docs/automation/bgm-drive-backup.service](docs/automation/bgm-drive-backup.service)
+- [docs/automation/bgm-drive-backup.timer](docs/automation/bgm-drive-backup.timer)
+- [docs/automation/bgm-drive-snapshot.sh](docs/automation/bgm-drive-snapshot.sh)
+- [docs/automation/rclone_bgm_backup.md](docs/automation/rclone_bgm_backup.md)
 
 **Scripts**
 - [scripts/clone-all.sh](scripts/clone-all.sh) — clone all component repos into one workspace
