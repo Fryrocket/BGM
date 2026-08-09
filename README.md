@@ -98,6 +98,7 @@ Direct links to every file in this repo.
 **Scripts**
 - [scripts/clone-all.sh](scripts/clone-all.sh)
 - [scripts/setup-workspace.sh](scripts/setup-workspace.sh)
+- [scripts/generate_file_indexes.py](scripts/generate_file_indexes.py) — regenerate File index sections across all component READMEs
 
 **Root**
 - [LICENSE](LICENSE)
