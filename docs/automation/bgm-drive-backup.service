@@ -1,0 +1,14 @@
+[Unit]
+Description=BGM Google Drive snapshot (+ git bundles pre-step)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# MUST be the same user that ran `rclone config`
+User=YOUR_USERNAME_HERE
+Group=YOUR_USERNAME_HERE
+# Bundle script fails soft (always exits 0) so a GitHub blip cannot kill Drive backup.
+ExecStartPre=/usr/local/bin/bgm-bundle-repos.sh
+ExecStart=/usr/local/bin/bgm-drive-snapshot.sh
+Nice=10
