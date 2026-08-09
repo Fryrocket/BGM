@@ -87,6 +87,7 @@ git clone https://github.com/Fryrocket/armband-ios.git
 
 **Docs**
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — system architecture, feature vector + MQTT contracts
+- [docs/BGM_Core_Dump_Refresh_2026-08-09_PM.md](docs/BGM_Core_Dump_Refresh_2026-08-09_PM.md)
 - [docs/COMPONENTS.md](docs/COMPONENTS.md) — hardware bill of materials
 - [docs/MANUAL.md](docs/MANUAL.md) — user manual
 - [docs/PINOUT.md](docs/PINOUT.md) — wiring and pin assignments
