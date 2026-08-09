@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Fryrocket
 #
-# Clone both BGM component repos into this workspace.
+# Clone all BGM component repos into this workspace.
 # Run from the BGM repo root.
 set -euo pipefail
 
@@ -11,8 +11,10 @@ cd "$ROOT"
 
 FIRMWARE_DIR="firmware"
 HOST_DIR="host"
+IOS_DIR="ios"
 FIRMWARE_URL="https://github.com/Fryrocket/armband-ppg-940nm.git"
 HOST_URL="https://github.com/Fryrocket/armband-ai.git"
+IOS_URL="https://github.com/Fryrocket/armband-ios.git"
 
 clone_or_update() {
   local dir="$1"
@@ -33,10 +35,12 @@ clone_or_update() {
 
 clone_or_update "$FIRMWARE_DIR" "$FIRMWARE_URL" "armband-ppg-940nm"
 clone_or_update "$HOST_DIR" "$HOST_URL" "armband-ai"
+clone_or_update "$IOS_DIR" "$IOS_URL" "armband-ios"
 
 echo
 echo "Workspace ready:"
 echo "  $ROOT/$FIRMWARE_DIR  (firmware)"
 echo "  $ROOT/$HOST_DIR      (Pi host)"
+echo "  $ROOT/$IOS_DIR       (iPhone companion)"
 echo
 echo "Next: docs/SETUP_FULL.md"
