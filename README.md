@@ -83,6 +83,31 @@ git clone https://github.com/Fryrocket/armband-ios.git
 | **iOS companion app** | **Scaffolded (new)** |
 | Glucose estimation accuracy | Experimental |
 
+## File index
+
+Direct links to every file in this repo.
+
+**Docs**
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — system architecture, feature vector + MQTT contracts
+- [docs/COMPONENTS.md](docs/COMPONENTS.md) — hardware bill of materials
+- [docs/MANUAL.md](docs/MANUAL.md) — user manual
+- [docs/PINOUT.md](docs/PINOUT.md) — wiring and pin assignments
+- [docs/SETUP_FULL.md](docs/SETUP_FULL.md) — end-to-end setup path
+- [docs/STATUS.md](docs/STATUS.md) — current project status
+
+**Scripts**
+- [scripts/clone-all.sh](scripts/clone-all.sh)
+- [scripts/setup-workspace.sh](scripts/setup-workspace.sh)
+
+**Root**
+- [LICENSE](LICENSE)
+- [.gitignore](.gitignore)
+
+**Sibling repos**
+- [armband-ppg-940nm](https://github.com/Fryrocket/armband-ppg-940nm) — firmware
+- [armband-ai](https://github.com/Fryrocket/armband-ai) — Pi 5 + Hailo host
+- [armband-ios](https://github.com/Fryrocket/armband-ios) — iPhone companion
+
 ## License / disclaimer
 
 **GNU General Public License v3.0 or later**.  
