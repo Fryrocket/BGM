@@ -92,6 +92,7 @@ git clone https://github.com/Fryrocket/armband-ios.git
 - [docs/MANUAL.md](docs/MANUAL.md) — user manual
 - [docs/PINOUT.md](docs/PINOUT.md) — wiring and pin assignments
 - [docs/S001_Plumbing_Verification_Checklist.md](docs/S001_Plumbing_Verification_Checklist.md)
+- [docs/S001_Run_Sheet.md](docs/S001_Run_Sheet.md)
 - [docs/SETUP_FULL.md](docs/SETUP_FULL.md) — end-to-end setup path
 - [docs/STATUS.md](docs/STATUS.md) — current project status
 - [docs/automation/bgm-bundle-repos.sh](docs/automation/bgm-bundle-repos.sh)
