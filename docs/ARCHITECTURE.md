@@ -64,9 +64,9 @@ The Pi logger (`armband_ai.logger`) JSON-parses this and inserts into SQLite. Do
 
 **Insert-time soft validation (2026-08-08):** `insert_reading` in `armband-ai` soft-checks BPM (35–220) and temperature (30–45 °C). Out-of-range values are logged and clamped; the row is never rejected (same pattern as SpO₂ < 0).
 
-## Feature vector (frozen contract)
+## Feature contracts (two, not one)
 
-Used by multi-feature models and the Hailo MLP path. Order must match train → ONNX → HEF:
+**17-vector (Hailo / MLP path only).** Frozen order for train → ONNX → HEF. Shape `[1, 17]` float32.
 
 ```
 0  filt940_mean
@@ -88,9 +88,17 @@ Used by multi-feature models and the Hailo MLP path. Order must match train → 
 16 duration_s
 ```
 
-Shape: `[1, 17]` float32.
+**10-feature OLS subset** (`DEFAULT_FEATURE_KEYS` in `models.py`). Used only by CPU multi-feature linear models. Explicit subset of the 17; does **not** consume the full vector:
 
-Extra diagnostic fields on `WindowFeatures` (not in the frozen vector): `max_clean_streak`, `clean_fraction`.
+```
+filt940_mean, filt940_std, filt940_slope, raw940_mean,
+bpm_mean, bpm_std, motion_mean, still_fraction,
+moving_transitions, temp_mean
+```
+
+p = 10 (11 free parameters with intercept). The structural n ≤ p bar in `models.py` applies to this path only.
+
+Extra diagnostic fields on `WindowFeatures` (not in either model vector): `max_clean_streak`, `clean_fraction`.
 
 ## Inference priority (host)
 
