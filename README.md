@@ -104,6 +104,7 @@ git clone https://github.com/Fryrocket/armband-ios.git
 - [scripts/clone-all.sh](scripts/clone-all.sh) — clone all component repos into one workspace
 - [scripts/generate_changelog.py](scripts/generate_changelog.py)
 - [scripts/generate_file_indexes.py](scripts/generate_file_indexes.py) — regenerate File index sections across all component READMEs
+- [scripts/generate_notes.py](scripts/generate_notes.py)
 - [scripts/setup-workspace.sh](scripts/setup-workspace.sh) — workspace helper
 - [scripts/update_file_index.py](scripts/update_file_index.py) — single-repo File index updater used by GitHub Action
 
