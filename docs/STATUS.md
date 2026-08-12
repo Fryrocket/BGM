@@ -1,4 +1,4 @@
-# BGM Status (2026-08-09 evening CDT)
+# BGM Status (2026-08-12)
 
 ## Working
 
@@ -9,14 +9,15 @@
 | 940 nm channel | Multi-sample + EMA; **gpio hold** across deep sleep; **RTC EMA seed flags** (no magic thresholds) |
 | Deep sleep + quiet-wake skip | GPIO wake; shorter awake if MAX missing; **static_assert** wake pin ≤5 |
 | MQTT publish | `armband/ppg`; bpm/spo2/temp −1 sentinels |
-| Pi MQTT logger + SQLite | Continuous ingest |
+| Pi MQTT logger + SQLite | Continuous ingest; per-reading `session_id` |
 | Feature extraction | 17-vector + clean streak |
-| Quality gates | Still fraction + quality + consecutive-clean streak (thresholds from simulation — provisional until real data) |
+| Quality gates | Still fraction + quality + consecutive-clean streak |
 | CPU / MLP→ONNX / Hailo path | Scripts live; HEF needs trained model on device |
 | Streamlit dashboard | Live + calibration |
 | Drift monitor | still-only filt940 median; advisory `is_stale` |
 | Insert soft validation | BPM/temp clamp on insert |
-| **iOS companion** | Parser ≤0→nil; store cap 5000 + prune; dual charts; Fix Pack 2 ACK path |
+| **iOS companion** | Parser ≤0→nil; store cap 5000 + prune; dual charts; Fix Pack 2 ACK path; cancel dump |
+| **Calibration / Subject_ID** | Homogeneity session gate; per-subject fits; `MIN_PAIRS_PER_SUBJECT=20`; `--subject-map` CLI (armband-ai **0.5.0**) |
 
 ## Firmware disposition (2026-08-09) — F1–F8 closed
 
@@ -30,6 +31,21 @@
 | F7 | EMA magic thresholds | Closed — rtcHave940 / rtcHaveMotion |
 | F8 | Wake pin assert | Closed — static_assert |
 
+## Locked decisions (2026-08-11 / 12)
+
+See Drive doc **BGM_Decisions_2026-08-12** (also in BGM folder).
+
+1. **Re-seat = new session** — mid-session re-seat closes the current session and opens a new one with a new Band_Placement_ID.
+2. **Homogeneity** — >1 distinct session_id in a pairing window → `dropped_mixed_session`.
+3. **Per-subject fits only** — never pool; skip+log `subject_id=None`; refuse under 20 pairs.
+4. **Schema freeze** — live Tracker / Session Log IDs only; Fry adds columns by hand if needed later.
+5. **Armband_Temp** = MAX30102 die temperature (documented).
+6. **Export protocol** — Fry exports both sheets to dated CSV in `02_Calibration_Data` immediately after new rows (edit protection, not DR).
+
+Live sheet IDs:
+- Tracker: `17uJJ6bp2dJ9GLERNZFdbtL8_NxvoEfWclgX8TFe5n-w`
+- Session Log: `1Jh0geyD5ETSlHHeoTT5A8eONzx44hiOT77aTF9q2zBc`
+
 ## Offline restore
 
 `BGM/bundles/` on Drive holds dated `git bundle` for all four repos + `RESTORE.txt`.
@@ -40,18 +56,18 @@ Automation scripts: `BGM/docs/automation/` (bundle + snapshot + systemd). Instal
 | Folder / sheet | State |
 |----------------|--------|
 | Calibration / models / logs / photos | **Empty** — pipeline ahead of data |
-| Calibration Tracker / Session Log | Headers only (+ example row) |
-| **Next** | Sheet columns (`Band_Placement_ID`, temps, `filt940_sd`) → **S001 plumbing** → S002 calibration with re-seat controls |
+| Calibration Tracker / Session Log | Headers only (+ example row); schema frozen |
+| **Next** | **S001 plumbing** → S002 calibration with re-seat controls |
 
 S001 checklist: `docs/S001_Plumbing_Verification_Checklist.md` + Drive Doc under `07_iOS_App/Requirements_and_Notes/`.
 
 ## Recommended next (human / wrist)
 
-1. Add sheet columns before any data rows
-2. Run S001 (21-item plumbing checklist)
-3. Meter deep-sleep µA (checklist in Drive)
-4. S002+ with re-seat / flat-Libre negative controls
-5. Pi: install nightly bundle scripts from `docs/automation/`
+1. Run S001 (plumbing checklist) — start export habit on Session Log row
+2. Meter deep-sleep µA (checklist in Drive)
+3. S002+ with re-seat / flat-Libre negative controls
+4. Pi: install nightly bundle scripts from `docs/automation/`
+5. Confirm Drive version-history / trash-recovery before first production rows
 
 ## Disclaimer
 
