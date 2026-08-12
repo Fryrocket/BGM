@@ -18,7 +18,7 @@ Still_Minutes:
 Avg_Quality:         
 Num_Libre_Pairs:     0
 Num_Fingerstick:     0
-Notes:               S001 plumbing only. Checklist __/21. Failures: ____
+Notes:               S001 plumbing only. Checklist __/22. Failures: ____
 Firmware_Version:    <from serial or app>
 Model_Version:       none
 ```
@@ -38,11 +38,12 @@ Model_Version:       none
 # On Pi — confirm services
 ps aux | grep -E 'run_logger|run_inference|streamlit' | grep -v grep
 
-# Confirm Mosquitto listening
-mosquitto_sub -h localhost -t armband/ppg -v -C 1   # should block until first message or timeout
+# Confirm Mosquitto is listening (10 s timeout)
+mosquitto_sub -h localhost -t armband/ppg -v -C 1 -W 10
 ```
 
-If logger is not running: `cd ~/armband-ai && source .venv/bin/activate && python scripts/run_logger.py &`
+If logger is not running:  
+`cd ~/armband-ai && source .venv/bin/activate && python scripts/run_logger.py &`
 
 ---
 
@@ -52,7 +53,7 @@ Power the band. Serial @ 115200:
 
 - [ ] **1.** Boot: `LIS3DH OK` (addr), `MAX30102 OK`, `INT1 configured`
 - [ ] **2.** Publish arrives:  
-  `mosquitto_sub -t armband/ppg -v`  
+  `mosquitto_sub -t armband/ppg -v -W 15`  
   → well-formed JSON, all expected fields present
 - [ ] **3.** 940 nm alive: `raw940` / `filt940` change, not 0, not pinned at 4095
 - [ ] **4.** Sentinels: no finger → `bpm`/`spo2` = −1
@@ -64,56 +65,65 @@ Power the band. Serial @ 115200:
 
 ---
 
-## 2. Pi → storage + features (items 8–11)
+## 2. Pi → storage + schema (items 8–12)
 
 ```bash
-# Row count climbing
-sqlite3 ~/armband-ai/data/armband.db "SELECT COUNT(*) FROM readings;"
+# Correct table name is ppg_readings
+sqlite3 ~/armband-ai/data/armband.db "SELECT COUNT(*) FROM ppg_readings;"
 
-# Soft validation quiet
-# (watch logger stdout — no clamp/reject spam on normal still readings)
+# Critical: session_id column must exist (migration ran)
+sqlite3 ~/armband-ai/data/armband.db "PRAGMA table_info(ppg_readings);" | grep session_id
+# Expected: a line containing "session_id"
 
-# Features / quality visible on dashboard or:
-python -c "
-from armband_ai.features import features_from_db
-from armband_ai.config import load_config
-cfg = load_config()
-print(features_from_db(cfg['database']['path'], minutes=3))
-"
+# Optional visibility (Pi-direct rows are expected to be NULL)
+sqlite3 ~/armband-ai/data/armband.db \
+  "SELECT COUNT(*) AS total,
+          SUM(CASE WHEN session_id IS NOT NULL THEN 1 ELSE 0 END) AS with_session
+   FROM ppg_readings;"
 ```
 
-- [ ] **8.** SQLite row count increases
-- [ ] **9.** No clamp/reject spam for normal readings
-- [ ] **10.** Features compute (quality scores on real windows)
-- [ ] **11.** Clean streak moves / non-zero during still
+- [ ] **8.** SQLite row count increases (`ppg_readings`)
+- [ ] **9.** `session_id` column exists (PRAGMA shows it).  
+  *Note:* Pi-direct MQTT rows will legitimately have `session_id = NULL`. That is expected. The migration check is column presence, not population.
+- [ ] **10.** Soft validation quiet (no clamp/reject spam on normal still readings)
+- [ ] **11.** Features compute (quality scores on real windows)
+- [ ] **12.** Clean streak moves / non-zero during still
 
 ---
 
-## 3. Dashboard (items 12–14)
+## 3. Dashboard (items 13–15)
 
-- [ ] **12.** Live tab: session visible, plotting, no stack traces
-- [ ] **13.** Quality score varies with movement
-- [ ] **14.** Drift section renders (empty baseline is expected / OK)
-
----
-
-## 4. Phone / iOS (items 15–20)
-
-- [ ] **15.** Receives: Live tab + pending count climbs
-- [ ] **16.** Dump to Pi: ACK; pending → 0
-- [ ] **17.** Partial insert: re-dump → green; `inserted + duplicates >= count`
-- [ ] **18.** Cancel mid-dump: no red; partial credit OK
-- [ ] **19.** Cancel after success: `totalSynced` does not drop
-- [ ] **20.** Manual disconnect: silent settle, no red UI
+- [ ] **13.** Live tab: session visible, plotting, no stack traces
+- [ ] **14.** Quality score varies with movement
+- [ ] **15.** Drift section renders (empty baseline is expected / OK)
 
 ---
 
-## 5. Export (item 21) + close
+## 4. Phone / iOS (items 16–21)
 
-- [ ] **21.** Export works (or at minimum: Session Log CSV written)
+- [ ] **16.** Receives: Live tab + pending count climbs
+- [ ] **17.** Dump to Pi: ACK; pending → 0
+- [ ] **18.** Partial insert: re-dump → green; `inserted + duplicates >= count`
+- [ ] **19.** Cancel mid-dump: no red; partial credit OK
+- [ ] **20.** Cancel after success: `totalSynced` does not drop
+- [ ] **21.** Manual disconnect: silent settle, no red UI
+
+**After a successful dump, optional extra check:**
+
+```bash
+sqlite3 ~/armband-ai/data/armband.db \
+  "SELECT COUNT(*) FROM ppg_readings WHERE session_id IS NOT NULL;"
+```
+If the iOS app is emitting `session_id`, this should be > 0. If it is still zero, note it but do not fail the plumbing run (subject picker / session generation is a known deferred item).
+
+---
+
+## 5. Export (item 22) + close
+
+- [ ] **22.** Export works (or at minimum: Session Log CSV written)
 
 **Close the session:**
-1. Fill End_DateTime + notes (score out of 21 + any failures).
+1. Fill End_DateTime + notes (score out of 22 + any failures).
 2. Export both sheets immediately:
    - File → Download → CSV
    - Name: `BGM_Session_Log_S001_YYYY-MM-DD.csv`  
@@ -122,8 +132,8 @@ print(features_from_db(cfg['database']['path'], minutes=3))
 3. Power band down or leave in production quiet-wake.
 
 **Read-out:**  
-21/21 → green light for S002 (glucose + re-seat controls).  
-Any FAIL → fix plumbing first. Do not proceed to calibration pairs until clean.
+22/22 → green light for S002 (glucose + re-seat controls).  
+Any FAIL on 1–12 or the session_id column check → fix plumbing first. Do not proceed to calibration pairs until clean.
 
 ---
 
