@@ -17,7 +17,7 @@
 | Drift monitor | still-only filt940 median; advisory `is_stale` |
 | Insert soft validation | BPM/temp clamp on insert |
 | **iOS companion** | Parser ≤0→nil; store cap 5000 + prune; dual charts; Fix Pack 2 ACK path; cancel dump |
-| **Calibration / Subject_ID** | Homogeneity session gate; per-subject fits; `MIN_PAIRS_PER_SUBJECT=20`; `--subject-map` CLI (armband-ai **0.5.0**) |
+| **Calibration / Subject_ID** | Homogeneity session gate; per-subject fits; `MIN_PAIRS_PER_SUBJECT=20`; **structural n ≤ p bar** (multi-feature refused when n ≤ #features); `--subject-map` CLI (armband-ai **0.5.0+**) |
 
 ## Firmware disposition (2026-08-09) — F1–F8 closed
 
@@ -57,13 +57,14 @@ Automation scripts: `BGM/docs/automation/` (bundle + snapshot + systemd). Instal
 |----------------|--------|
 | Calibration / models / logs / photos | **Empty** — pipeline ahead of data |
 | Calibration Tracker / Session Log | Headers only (+ example row); schema frozen |
-| **Next** | **S001 plumbing** → S002 calibration with re-seat controls |
+| **Next** | **S001 plumbing (Run Sheet ready)** → S002 calibration with re-seat controls |
 
-S001 checklist: `docs/S001_Plumbing_Verification_Checklist.md` + Drive Doc under `07_iOS_App/Requirements_and_Notes/`.
+S001 Run Sheet (one page, pre-filled stub): `docs/S001_Run_Sheet.md`  
+(Old checklist redirects to it.)
 
 ## Recommended next (human / wrist)
 
-1. Run S001 (plumbing checklist) — start export habit on Session Log row
+1. Run S001 (Run Sheet) — start export habit on Session Log row
 2. Meter deep-sleep µA (checklist in Drive)
 3. S002+ with re-seat / flat-Libre negative controls
 4. Pi: install nightly bundle scripts from `docs/automation/`
@@ -71,4 +72,4 @@ S001 checklist: `docs/S001_Plumbing_Verification_Checklist.md` + Drive Doc under
 
 ## Disclaimer
 
-Experimental personal research. **Not a medical device.**
+Experimental personal research. **Not a medical device**.
