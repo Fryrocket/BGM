@@ -10,14 +10,14 @@
 | Deep sleep + quiet-wake skip | GPIO wake; shorter awake if MAX missing; **static_assert** wake pin ≤5 |
 | MQTT publish | `armband/ppg`; bpm/spo2/temp −1 sentinels |
 | Pi MQTT logger + SQLite | Continuous ingest; per-reading `session_id` |
-| Feature extraction | 17-vector + clean streak |
-| Quality gates | Still fraction + quality + consecutive-clean streak |
-| CPU / MLP→ONNX / Hailo path | Scripts live; HEF needs trained model on device |
+| Feature extraction | Two contracts: **17-vector** (Hailo/MLP, frozen in `features.py`) and **10-feature OLS subset** (`DEFAULT_FEATURE_KEYS` in `models.py`). Clean streak computed on both paths. |
+| Quality gates | Still fraction + quality + consecutive-clean streak — **code implemented, never exercised on real pairs** |
+| CPU / MLP→ONNX / Hailo path | Scripts live; HEF needs trained model on device. Multi-feature OLS has structural n ≤ p bar (p=10). |
 | Streamlit dashboard | Live + calibration |
 | Drift monitor | still-only filt940 median; advisory `is_stale` |
 | Insert soft validation | BPM/temp clamp on insert |
 | **iOS companion** | Parser ≤0→nil; store cap 5000 + prune; dual charts; Fix Pack 2 ACK path; cancel dump |
-| **Calibration / Subject_ID** | Homogeneity session gate; per-subject fits; `MIN_PAIRS_PER_SUBJECT=20`; **structural n ≤ p bar** (multi-feature refused when n ≤ #features); `--subject-map` CLI (armband-ai **0.5.0+**) |
+| **Calibration / Subject_ID** | Homogeneity + per-subject fits + `MIN_PAIRS_PER_SUBJECT=20` + **structural n ≤ p bar** (p=10 for multi-feature OLS). Code paths implemented; **zero real pairs exist** so nothing has been fit yet. `--subject-map` CLI (armband-ai **0.5.0**) |
 
 ## Firmware disposition (2026-08-09) — F1–F8 closed
 

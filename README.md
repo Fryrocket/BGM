@@ -61,6 +61,7 @@ git clone https://github.com/Fryrocket/armband-ios.git
 | **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** | System architecture, data flow, MQTT contract |
 | **[docs/SETUP_FULL.md](docs/SETUP_FULL.md)** | End-to-end setup |
 | **[docs/STATUS.md](docs/STATUS.md)** | Current status matrix |
+| **[docs/S001_Run_Sheet.md](docs/S001_Run_Sheet.md)** | S001 plumbing verification (one-page run sheet) |
 | [armband-ios/README.md](https://github.com/Fryrocket/armband-ios) | iOS companion app status & plans |
 
 ## High-level data flow
@@ -78,7 +79,7 @@ git clone https://github.com/Fryrocket/armband-ios.git
 | Armband firmware | Working |
 | MQTT streaming | Working |
 | Pi logger + dashboard | Working |
-| Quality gates + models | Working |
+| Quality gates + models | Implemented (zero real pairs; n≤p refusal active) |
 | Hailo-8 path | Implemented |
 | **iOS companion app** | **Scaffolded (new)** |
 | Glucose estimation accuracy | Experimental |
