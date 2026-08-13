@@ -1,74 +1,70 @@
-# BGM Status (2026-08-12)
+# BGM Status (2026-08-13 13:15 CDT)
+
+Pickup. Last wrist contact: **2026-08-09**. No S001 measurement.
+
+## armband-ai HEAD (work today)
+
+See [armband-ai/docs/STATUS.md](https://github.com/Fryrocket/armband-ai/blob/main/docs/STATUS.md) for the live pickup.
+
+Today: disabled Hailo/MLP (1121 params), three-condition hard gate (bpm / spo2 / motion), baseline is the only S001 path and now refuses mixed subjects, n<10, tight/bimodal glucose.
+
+| SHA (human) | What |
+|-------------|------|
+| *(armband-ai main)* | ASK 21 amend + ASK 24 drop-count sidecar |
+| `a63cae7` | ASK 20–23 |
+| `d042baa` | ASK 16–19 |
+| `2978112` `7cb852f` `85f8af3` | v0.5.1 disable + gate |
+
+Package **0.5.1**. Other repos unchanged: BGM `3a79cef2`, ppg `3a3304fa`, ios `c4af2878`.
 
 ## Working
 
 | Area | Notes |
 |------|--------|
 | Firmware HR / SpO₂ / temp | MAX30102; gated on `maxOk` |
-| LIS3DH motion + INT1 wake | `lis3dhAddr` 0x18/0x19; latched INT1 clear; C3 GPIO wake API |
-| 940 nm channel | Multi-sample + EMA; **gpio hold** across deep sleep; **RTC EMA seed flags** (no magic thresholds) |
-| Deep sleep + quiet-wake skip | GPIO wake; shorter awake if MAX missing; **static_assert** wake pin ≤5 |
-| MQTT publish | `armband/ppg`; bpm/spo2/temp −1 sentinels |
-| Pi MQTT logger + SQLite | Continuous ingest; per-reading `session_id` |
-| Feature extraction | Two contracts: **17-vector** (Hailo/MLP, frozen in `features.py`) and **10-feature OLS subset** (`DEFAULT_FEATURE_KEYS` in `models.py`). Clean streak computed on both paths. |
-| Quality gates | Still fraction + quality + consecutive-clean streak — **code implemented, never exercised on real pairs** |
-| CPU / MLP→ONNX / Hailo path | Scripts live; HEF needs trained model on device. Multi-feature OLS has structural n ≤ p bar (p=10). |
-| Streamlit dashboard | Live + calibration |
-| Drift monitor | still-only filt940 median; advisory `is_stale` |
-| Insert soft validation | BPM/temp clamp on insert |
-| **iOS companion** | Parser ≤0→nil; store cap 5000 + prune; dual charts; Fix Pack 2 ACK path; cancel dump |
-| **Calibration / Subject_ID** | Homogeneity + per-subject fits + `MIN_PAIRS_PER_SUBJECT=20` + **structural n ≤ p bar** (p=10 for multi-feature OLS). Code paths implemented; **zero real pairs exist** so nothing has been fit yet. `--subject-map` CLI (armband-ai **0.5.0**) |
-
-## Firmware disposition (2026-08-09) — F1–F8 closed
-
-| ID | Item | Status |
-|----|------|--------|
-| F1 | Infinite MAX loop | Closed — maxOk + 2.5s FIFO + 3s awake cap |
-| F2 | LIS3DH hardcode 0x18 | Closed before review |
-| F3/F4 | −1 sentinels / junk wake | Closed before review |
-| F5 | Phantom transition | Closed — suppressTransition |
-| F6 | gpio hold emitter | Closed |
-| F7 | EMA magic thresholds | Closed — rtcHave940 / rtcHaveMotion |
-| F8 | Wake pin assert | Closed — static_assert |
+| LIS3DH motion + INT1 wake | Separate chip; missing `moving` is now a **hard gate fail** (`no_motion_data`) |
+| 940 nm channel | Multi-sample + EMA; gpio hold; RTC EMA seed flags |
+| MQTT + SQLite | Continuous ingest; per-reading `session_id` |
+| Feature extraction | Frozen **17-vector** (`filt940_std` in contract). `n_valid_*` are gate-side only. |
+| Quality gate | Hard-fail: `no_valid_bpm`, `no_valid_spo2`, `no_motion_data`. Soft heuristics after. |
+| Hailo / MLP | **DISABLED** until per-subject pairs are four figures. `_param_count()` derived. |
+| Multi-feature OLS | n ≤ p bar (p=10). Will not run at S001. |
+| **Baseline** | **The S001 path.** Mixed subjects raise. n≥10. Range≥40 **and** 3 terciles. n<30 → `grade=pilot`. |
+| Drop counts | `.attrs` + sibling `*.csv.drops.json` (`write_pairs`). Band-fit diagnostic. |
+| Streamlit dashboard | Shows drop counts and pilot-grade warning. |
+| iOS companion | Unchanged today. |
 
 ## Locked decisions (2026-08-11 / 12)
 
-See Drive doc **BGM_Decisions_2026-08-12** (also in BGM folder).
+See Drive **BGM_Decisions_2026-08-12**.
 
-1. **Re-seat = new session** — mid-session re-seat closes the current session and opens a new one with a new Band_Placement_ID.
-2. **Homogeneity** — >1 distinct session_id in a pairing window → `dropped_mixed_session`.
-3. **Per-subject fits only** — never pool; skip+log `subject_id=None`; refuse under 20 pairs.
-4. **Schema freeze** — live Tracker / Session Log IDs only; Fry adds columns by hand if needed later.
-5. **Armband_Temp** = MAX30102 die temperature (documented).
-6. **Export protocol** — Fry exports both sheets to dated CSV in `02_Calibration_Data` immediately after new rows (edit protection, not DR).
+1. Re-seat = new session.
+2. Homogeneity — mixed session_id in a window → `dropped_mixed_session`.
+3. Per-subject fits only — never pool. `fit_baseline` now **raises** on mixed subjects.
+4. Schema freeze.
+5. Armband_Temp = MAX30102 die temperature (in the frozen 17-vector; hold-back is a product call, not a code defect).
+6. Export protocol — dated CSV in `02_Calibration_Data`.
 
 Live sheet IDs:
 - Tracker: `17uJJ6bp2dJ9GLERNZFdbtL8_NxvoEfWclgX8TFe5n-w`
 - Session Log: `1Jh0geyD5ETSlHHeoTT5A8eONzx44hiOT77aTF9q2zBc`
 
-## Offline restore
+## Open
 
-`BGM/bundles/` on Drive holds dated `git bundle` for all four repos + `RESTORE.txt`.
-Automation scripts: `BGM/docs/automation/` (bundle + snapshot + systemd). Install on Pi.
+| ID | Item |
+|----|------|
+| 1 | **S001 / source population** — main event. Band not on a wrist. |
+| 6 | `filt940_std` → `sd` at sheet-write boundary only. |
+| 4 | Hailo provenance — deprioritised (path off). |
+| 15 | Drive write from implementer is intermittent. Snapshot `08_Source_Snapshot/2026-08-13` cut at armband-ai `794019d2` is **stale**. |
 
 ## Experiment status
 
 | Folder / sheet | State |
 |----------------|--------|
-| Calibration / models / logs / photos | **Empty** — pipeline ahead of data |
-| Calibration Tracker / Session Log | Headers only (+ example row); schema frozen |
-| **Next** | **S001 plumbing (Run Sheet ready)** → S002 calibration with re-seat controls |
-
-S001 Run Sheet (one page, pre-filled stub): `docs/S001_Run_Sheet.md`  
-(Old checklist redirects to it.)
-
-## Recommended next (human / wrist)
-
-1. Run S001 (Run Sheet) — start export habit on Session Log row
-2. Meter deep-sleep µA (checklist in Drive)
-3. S002+ with re-seat / flat-Libre negative controls
-4. Pi: install nightly bundle scripts from `docs/automation/`
-5. Confirm Drive version-history / trash-recovery before first production rows
+| Calibration / models / logs / photos | **Empty** — gates ahead of data |
+| Tracker / Session Log | Headers only; schema frozen |
+| **Next** | **S001 plumbing** — Run Sheet ready |
 
 ## Disclaimer
 
