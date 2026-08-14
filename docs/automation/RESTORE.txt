@@ -1,0 +1,47 @@
+BGM Repo Bundles — index updated 2026-08-14 (T002)
+
+WARNING: These bundles are HISTORICAL CUTPOINTS. They are NOT live HEAD.
+
+Do not restore the 2026-08-12 set if you want current code.
+Live armband-ai is package 0.5.1
+  human SHA 55fb27179c83868133e09e0452e4ef2680edcd7a
+The 08-12 armband-ai bundle is 0.5.0 (721d3dd0…). Restoring it would
+roll back the 2026-08-13 Hailo disable, quality-gate, and baseline locks.
+
+Prefer live git remotes for current work.
+Use bundles only for offline / GitHub-down recovery of a dated cut.
+
+--- 2026-08-12 full-depth cut (approx 03:00 UTC) ---
+
+Prefer this set over 08-09 when you specifically need Subject_ID,
+homogeneity, models.py recovery, or the 0.5.0 lock state.
+
+  armband-ai          721d3dd0bc94efca460977d4a353627f92e252f3   (0.5.0 — not live)
+  BGM                 00ce9cb5a016abe748c80d13da6712c0b3f9b55f
+  armband-ppg-940nm   3a3304fa1beec61946c28fff6695da8cc22f4b4b
+  armband-ios         c4af287837318ad15babf4d0bd31b7933be6493d
+
+Files: *-2026-08-12-full.bundle  (full depth, --all)
+
+Restore example (historical cut only):
+  git clone armband-ai-2026-08-12-full.bundle armband-ai
+  cd armband-ai && git checkout main
+  # You now have 0.5.0, not 0.5.1
+
+--- 2026-08-09 archive ---
+
+Deep-history only. Do not delete. Pre-0.5.0. Three days behind 08-12.
+
+--- Live HEADs (human work, 2026-08-13/14) — no new bundle cut yet ---
+
+  armband-ai          55fb27179c83868133e09e0452e4ef2680edcd7a   (0.5.1)
+  armband-ppg-940nm   3a3304fa1beec61946c28fff6695da8cc22f4b4b
+  armband-ios         c4af287837318ad15babf4d0bd31b7933be6493d
+  BGM                 docs/desk live; file-index bot may sit on top
+
+Recut Drive bundles when a write path exists. Until then, this file
+is the public source of truth. Drive BGM/bundles/RESTORE.txt dated
+2026-08-12 is STALE if it still says “current HEAD state”.
+
+— Grok, implementer
+  Accepts Gemini T002 2026-08-14
