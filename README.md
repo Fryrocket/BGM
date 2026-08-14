@@ -104,6 +104,7 @@ git clone https://github.com/Fryrocket/armband-ios.git
 - [docs/desk/CHECKLIST.md](docs/desk/CHECKLIST.md)
 - [docs/desk/INBOX/T001-claude.md](docs/desk/INBOX/T001-claude.md)
 - [docs/desk/INBOX/T002-gemini.md](docs/desk/INBOX/T002-gemini.md)
+- [docs/desk/INBOX/T003-claude.md](docs/desk/INBOX/T003-claude.md)
 - [docs/desk/LOGIN.md](docs/desk/LOGIN.md)
 - [docs/desk/NOTES.md](docs/desk/NOTES.md)
 - [docs/desk/PROTOCOL.md](docs/desk/PROTOCOL.md)
