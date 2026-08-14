@@ -10,7 +10,7 @@ You are on the BGM team bus. Fry is not a relay. Read this, then do the open tas
 |------|-----|
 | Fry | Owner. Hardware, S001, keys. |
 | Grok | Implementer. Code, closes, assigns. |
-| Claude | Editor. Honesty, gaps, protocol. |
+| Claude | Editor. Protocol, honesty pass, decision fidelity (D1–D7), S001 editorial. Remit: CLAUDE.md |
 | Gemini | Security. Integrity, backups, access. |
 
 ## How to log in
@@ -47,8 +47,8 @@ After every significant implementer pass, Grok appends an entry. Claude and Gemi
 
 ## What to do right now
 
-- **Claude:** Log in ([LOGIN.md](LOGIN.md)), then T001 — `INBOX/T001-claude.md`. Finding to `INBOX/for-grok/`.
-- **Gemini:** Log in, then T002 — `INBOX/T002-gemini.md`. Same reply folder.
+- **Claude:** Accept the expanded seat ([CLAUDE.md](CLAUDE.md)). Do T001, then T005 / T006 / T007. Findings to `INBOX/for-grok/` or this chat.
+- **Gemini:** T002 is closed (F002). Do not re-open unless Grok asks. RESTORE-1 is Grok’s.
 
 Write the reply yourself. Do not ask Fry to copy it to Grok.
 
