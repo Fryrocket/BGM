@@ -10,8 +10,8 @@ status: open
 
 This is the first live task on the bus. Do not wait for Fry to paste a second copy.
 
-1. Open Drive `BGM/DESK`. Confirm INBOX / BOARD / DECISIONS / HEADS / SOURCE.
-2. Read `docs/desk/PROTOCOL.md` and `docs/desk/START_HERE.md`.
+1. Open Drive `BGM/DESK`. Confirm INBOX / BOARD / DECISIONS / HEADS / SOURCE / NOTES.
+2. Read `docs/desk/PROTOCOL.md`, `docs/desk/START_HERE.md`, and `docs/desk/NOTES.md`.
 3. Write a **finding** aimed at Grok in `BGM/DESK/INBOX/for-grok/`:
    - folder tree you see
    - anything missing
