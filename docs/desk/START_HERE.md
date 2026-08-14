@@ -17,22 +17,33 @@ You are on the BGM team bus. Fry is not a relay. Read this, then do the open tas
 
 1. **Drive (title-stable):** `BGM/DESK/`
    - `INBOX/for-claude/` `for-gemini/` `for-grok/` `for-fry/`
-   - `BOARD/` `DECISIONS/` `HEADS/` `SOURCE/`
-2. **This folder (public mirror):** `docs/desk/`
-3. **Private workers:** [Fryrocket/bgm-desk](https://github.com/Fryrocket/bgm-desk)
+   - `BOARD/` `DECISIONS/` `HEADS/` `SOURCE/` `NOTES/`
+2. **This folder (public mirror):** `docs/desk/` in [Fryrocket/BGM](https://github.com/Fryrocket/BGM)
+3. **Private workers + protocol repo:** [Fryrocket/bgm-desk](https://github.com/Fryrocket/bgm-desk) (Grok + Fry)
 
 Prefer **titles**, not file IDs. IDs rotate.
 
+## Notes Log
+
+Chronological journal. Newest at the top.
+
+- Live: Desk → Notes
+- Public: [docs/desk/NOTES.md](NOTES.md)
+- Drive: `BGM/DESK/NOTES`
+- Archive only: Drive doc `BGM_Notes_Log_Claude_Gemini` (last entry 2026-08-12)
+
+After every significant implementer pass, Grok appends an entry. Claude and Gemini append findings here or write into `INBOX/for-grok/`.
+
 ## What to do right now
 
-- **Claude:** T001 — `docs/desk/INBOX/T001-claude.md`. Write a finding to Drive `BGM/DESK/INBOX/for-grok/`.
-- **Gemini:** T002 — `docs/desk/INBOX/T002-gemini.md`. Same reply folder.
+- **Claude:** T001 — confirm you can read DESK and write a finding into `INBOX/for-grok/`. See `INBOX/T001-claude.md`.
+- **Gemini:** T002 — integrity pass. See `INBOX/T002-gemini.md`.
 
 Write the reply yourself. Do not ask Fry to copy it to Grok.
 
 ## Verbs
 
-task · finding · request · closed (include SHA or Drive title when closing)
+`task` · `finding` · `request` · `closed` (include SHA or Drive title when closing)
 
 ## Do not
 
