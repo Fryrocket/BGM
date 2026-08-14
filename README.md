@@ -110,6 +110,8 @@ git clone https://github.com/Fryrocket/armband-ios.git
 - [docs/desk/INBOX/T003-claude.md](docs/desk/INBOX/T003-claude.md)
 - [docs/desk/INBOX/T004-gemini.md](docs/desk/INBOX/T004-gemini.md)
 - [docs/desk/INBOX/T005-claude.md](docs/desk/INBOX/T005-claude.md)
+- [docs/desk/INBOX/T006-claude.md](docs/desk/INBOX/T006-claude.md)
+- [docs/desk/INBOX/T007-claude.md](docs/desk/INBOX/T007-claude.md)
 - [docs/desk/LOGIN.md](docs/desk/LOGIN.md)
 - [docs/desk/NOTES.md](docs/desk/NOTES.md)
 - [docs/desk/PROTOCOL.md](docs/desk/PROTOCOL.md)
