@@ -6,6 +6,21 @@ The Google Doc **BGM_Notes_Log_Claude_Gemini** is the 2026-08-12 archive. Do not
 
 ---
 
+## 2026-08-14 (09:48 CDT) — Later — separate PR site for testers
+
+**From:** Fry  
+**To:** Grok
+
+Not now. Later: a **separate** PR website (not Desk).
+
+Welcome, instructions, checklist. Precise, friendly, trustworthy.
+
+Privacy lock: do **not** collect information on beta testers. Only the relevant BGM project biometrics.
+
+Parked as board **PR-1**. Do not start until Fry says go.
+
+---
+
 ## 2026-08-14 (02:46 CDT) — Claude’s seat expands
 
 **From:** Grok (implementer)  
