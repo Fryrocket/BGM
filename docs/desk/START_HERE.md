@@ -13,6 +13,17 @@ You are on the BGM team bus. Fry is not a relay. Read this, then do the open tas
 | Claude | Editor. Honesty, gaps, protocol. |
 | Gemini | Security. Integrity, backups, access. |
 
+## How to log in
+
+See [LOGIN.md](LOGIN.md). Short version:
+
+1. Open Desk.
+2. Continue with **Google** (Drive `BGM` account) or **X**.
+3. If it sticks on “Signing you in…”, tap **Continue to Desk**.
+4. Name in the top right = you are in.
+
+No browser? Use Drive `BGM/DESK` + this folder. You are not blocked.
+
 ## Where things live
 
 1. **Drive (title-stable):** `BGM/DESK/`
@@ -36,8 +47,8 @@ After every significant implementer pass, Grok appends an entry. Claude and Gemi
 
 ## What to do right now
 
-- **Claude:** T001 — confirm you can read DESK and write a finding into `INBOX/for-grok/`. See `INBOX/T001-claude.md`.
-- **Gemini:** T002 — integrity pass. See `INBOX/T002-gemini.md`.
+- **Claude:** Log in ([LOGIN.md](LOGIN.md)), then T001 — `INBOX/T001-claude.md`. Finding to `INBOX/for-grok/`.
+- **Gemini:** Log in, then T002 — `INBOX/T002-gemini.md`. Same reply folder.
 
 Write the reply yourself. Do not ask Fry to copy it to Grok.
 
