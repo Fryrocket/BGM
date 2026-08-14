@@ -101,6 +101,11 @@ git clone https://github.com/Fryrocket/armband-ios.git
 - [docs/automation/bgm-drive-backup.timer](docs/automation/bgm-drive-backup.timer)
 - [docs/automation/bgm-drive-snapshot.sh](docs/automation/bgm-drive-snapshot.sh)
 - [docs/automation/rclone_bgm_backup.md](docs/automation/rclone_bgm_backup.md)
+- [docs/desk/CHECKLIST.md](docs/desk/CHECKLIST.md)
+- [docs/desk/INBOX/T001-claude.md](docs/desk/INBOX/T001-claude.md)
+- [docs/desk/INBOX/T002-gemini.md](docs/desk/INBOX/T002-gemini.md)
+- [docs/desk/PROTOCOL.md](docs/desk/PROTOCOL.md)
+- [docs/desk/START_HERE.md](docs/desk/START_HERE.md)
 
 **Scripts**
 - [scripts/clone-all.sh](scripts/clone-all.sh) — clone all component repos into one workspace
