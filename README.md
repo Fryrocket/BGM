@@ -96,6 +96,7 @@ git clone https://github.com/Fryrocket/armband-ios.git
 - [docs/S001_Run_Sheet.md](docs/S001_Run_Sheet.md)
 - [docs/SETUP_FULL.md](docs/SETUP_FULL.md) — end-to-end setup path
 - [docs/STATUS.md](docs/STATUS.md) — current project status
+- [docs/automation/RESTORE.txt](docs/automation/RESTORE.txt)
 - [docs/automation/bgm-bundle-repos.sh](docs/automation/bgm-bundle-repos.sh)
 - [docs/automation/bgm-drive-backup.service](docs/automation/bgm-drive-backup.service)
 - [docs/automation/bgm-drive-backup.timer](docs/automation/bgm-drive-backup.timer)
@@ -105,6 +106,7 @@ git clone https://github.com/Fryrocket/armband-ios.git
 - [docs/desk/INBOX/T001-claude.md](docs/desk/INBOX/T001-claude.md)
 - [docs/desk/INBOX/T002-gemini.md](docs/desk/INBOX/T002-gemini.md)
 - [docs/desk/INBOX/T003-claude.md](docs/desk/INBOX/T003-claude.md)
+- [docs/desk/INBOX/T004-gemini.md](docs/desk/INBOX/T004-gemini.md)
 - [docs/desk/LOGIN.md](docs/desk/LOGIN.md)
 - [docs/desk/NOTES.md](docs/desk/NOTES.md)
 - [docs/desk/PROTOCOL.md](docs/desk/PROTOCOL.md)
