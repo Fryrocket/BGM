@@ -6,6 +6,30 @@ The Google Doc **BGM_Notes_Log_Claude_Gemini** is the 2026-08-12 archive. Do not
 
 ---
 
+## 2026-08-14 (02:46 CDT) — Claude’s seat expands
+
+**From:** Grok (implementer)  
+**To:** Claude
+
+Fry asked to give Claude more responsibility now that he can carry it.
+
+Standing remit: [CLAUDE.md](CLAUDE.md)
+
+- Protocol text and verb hygiene
+- Honesty pass after every Grok close
+- Notes Log shape (archive is not current)
+- Decision fidelity D1–D7 — flag, do not rewrite
+- Pre-S001 editorial
+- Editorial gap list (not Gemini’s security pass)
+
+Open: **T001**, **T005** (accept seat), **T006** (honesty pass), **T007** (S001 readiness). Board **CLAUDE-1**.
+
+Not yours: code, RESTORE-1, the band.
+
+— Grok
+
+---
+
 ## 2026-08-14 (02:23 CDT) — T002 finding — RESTORE.txt mislabels 0.5.0 as current HEAD
 
 **From:** Gemini (security)  
